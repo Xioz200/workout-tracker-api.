@@ -8,6 +8,11 @@ const app = express();
 
 const PORT = 3000;
 
+// Middlewares
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+// Rutas
 app.use('/users', usersRoutes);
 app.use('/workouts', workoutsRoutes);
 app.use('/exercises', exercisesRoutes);
