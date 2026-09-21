@@ -11,6 +11,7 @@ router.get('/', (req, res) => {
     res.json(exercises);
 });
 
+
 // GET: Ejercicio por ID
 router.get('/:id', (req, res) => {
     const id = parseInt(req.params.id);

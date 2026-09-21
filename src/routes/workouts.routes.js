@@ -12,6 +12,28 @@ router.get('/', (req, res) => {
     res.json(workouts);
 });
 
+// POST - Crear un workout
+router.post('/', (req, res) => {
+    const { name, userId } = req.body;
+
+    if (!name || !userId) {
+        return res.status(400).json({
+            error: 'El nombre del workout y el userId son obligatorios'
+        });
+    }
+
+    const newWorkout = {
+        id: 3,
+        name: name,
+        userId: userId
+    };
+
+    res.status(201).json({
+        mensaje: 'Workout creado correctamente',
+        workout: newWorkout
+    });
+});
+
 // GET: Obtener un entrenamiento por ID
 router.get('/:id', (req, res) => {
     const id = parseInt(req.params.id);

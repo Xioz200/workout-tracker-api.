@@ -18,15 +18,29 @@ router.get('/', (req, res) => {
     ]);
 });
 
-// POST - Prueba para recibir datos
-router.post('/test', (req, res) => {
-    const data = req.body;
+// POST - Crear un usuario
+router.post('/', (req, res) => {
+    const { name, email } = req.body;
 
-    res.json({
-        mensaje: 'Datos recibidos correctamente',
-        datos: data
+    // Validar los datos recibidos
+    if (!name || !email) {
+        return res.status(400).json({
+            error: 'El nombre y el correo son obligatorios'
+        });
+    }
+
+    // Crear usuario de prueba
+    const newUser = {
+        id: 3,
+        name: name,
+        email: email
+    };
+
+    res.status(201).json({
+        mensaje: 'Usuario creado correctamente',
+        usuario: newUser
     });
-});
+}); 
 
 // GET - Obtener un usuario por ID
 router.get('/:id', (req, res) => {
