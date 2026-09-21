@@ -8,6 +8,8 @@ const app = express();
 
 const PORT = 3000;
 
+app.use(express.json());
+
 app.use('/users', usersRoutes);
 app.use('/workouts', workoutsRoutes);
 app.use('/exercises', exercisesRoutes);
