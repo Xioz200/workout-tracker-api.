@@ -2,33 +2,32 @@ const express = require('express');
 
 const router = express.Router();
 
+const workouts = [
+    {
+        id: 1,
+        name: 'Rutina de pecho',
+        userId: 1
+    },
+    {
+        id: 2,
+        name: 'Rutina de piernas',
+        userId: 2
+    }
+];
+
 // GET /workouts
-// Obtener todos los workouts
 router.get('/', (req, res) => {
     const limit = parseInt(req.query.limit);
     const name = req.query.name;
 
-    let workouts = [
-        {
-            id: 1,
-            name: 'Rutina de pecho',
-            userId: 1
-        },
-        {
-            id: 2,
-            name: 'Rutina de piernas',
-            userId: 2
-        }
-    ];
+    let result = workouts;
 
-    // Filtrar por nombre
     if (name) {
-        workouts = workouts.filter(workout =>
+        result = result.filter(workout =>
             workout.name.toLowerCase().includes(name.toLowerCase())
         );
     }
 
-    // Validar y aplicar limit
     if (req.query.limit !== undefined) {
         if (isNaN(limit) || limit <= 0) {
             return res.status(400).json({
@@ -36,41 +35,24 @@ router.get('/', (req, res) => {
             });
         }
 
-        workouts = workouts.slice(0, limit);
+        result = result.slice(0, limit);
     }
 
-    res.status(200).json(workouts);
+    res.status(200).json(result);
 });
 
-
 // GET /workouts/:id
-// Obtener un workout por ID
 router.get('/:id', (req, res) => {
     const id = parseInt(req.params.id);
 
-    const workouts = [
-        {
-            id: 1,
-            name: 'Rutina de pecho',
-            userId: 1
-        },
-        {
-            id: 2,
-            name: 'Rutina de piernas',
-            userId: 2
-        }
-    ];
-
-    // Validar que el ID sea un número
-    if (isNaN(id)) {
+    if (isNaN(id) || id <= 0) {
         return res.status(400).json({
-            error: 'El ID debe ser un número'
+            error: 'El ID debe ser un número entero positivo'
         });
     }
 
     const workout = workouts.find(workout => workout.id === id);
 
-    // Si no existe
     if (!workout) {
         return res.status(404).json({
             error: 'Workout no encontrado'
@@ -80,13 +62,10 @@ router.get('/:id', (req, res) => {
     res.status(200).json(workout);
 });
 
-
 // POST /workouts
-// Crear un nuevo workout
 router.post('/', (req, res) => {
     const { name, userId } = req.body;
 
-    // Validar datos obligatorios
     if (!name || !userId) {
         return res.status(400).json({
             error: 'El nombre del workout y el userId son obligatorios'
@@ -94,15 +73,40 @@ router.post('/', (req, res) => {
     }
 
     const newWorkout = {
-        id: 3,
+        id: workouts.length + 1,
         name: name,
         userId: userId
     };
+
+    workouts.push(newWorkout);
 
     res.status(201).json({
         mensaje: 'Workout creado correctamente',
         workout: newWorkout
     });
+});
+
+// DELETE /workouts/:id
+router.delete('/:id', (req, res) => {
+    const id = parseInt(req.params.id);
+
+    if (isNaN(id) || id <= 0) {
+        return res.status(400).json({
+            error: 'El ID debe ser un número entero positivo'
+        });
+    }
+
+    const index = workouts.findIndex(workout => workout.id === id);
+
+    if (index === -1) {
+        return res.status(404).json({
+            error: 'Workout no encontrado'
+        });
+    }
+
+    workouts.splice(index, 1);
+
+    res.status(204).send();
 });
 
 module.exports = router;
