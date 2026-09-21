@@ -1,17 +1,34 @@
 const express = require('express');
+
 const router = express.Router();
 
-let users = [
-    { id: 1, name: 'Miguel', email: 'miguel@email.com' },
-    { id: 2, name: 'Carlos', email: 'carlos@email.com' }
-];
-
-// GET: Obtener todos los usuarios
+// GET - Obtener todos los usuarios
 router.get('/', (req, res) => {
-    res.json(users);
+    res.json([
+        {
+            id: 1,
+            name: 'Miguel',
+            email: 'miguel@email.com'
+        },
+        {
+            id: 2,
+            name: 'Carlos',
+            email: 'carlos@email.com'
+        }
+    ]);
 });
 
-// GET: Obtener usuario por ID
+// POST - Prueba para recibir datos
+router.post('/test', (req, res) => {
+    const data = req.body;
+
+    res.json({
+        mensaje: 'Datos recibidos correctamente',
+        datos: data
+    });
+});
+
+// GET - Obtener un usuario por ID
 router.get('/:id', (req, res) => {
     const id = parseInt(req.params.id);
 
@@ -21,31 +38,11 @@ router.get('/:id', (req, res) => {
         });
     }
 
-    const user = users.find(u => u.id === id);
-
-    if (!user) {
-        return res.status(404).json({ error: 'Usuario no encontrado' });
-    }
-
-    res.json(user);
-});
-
-// POST: Crear nuevo usuario
-router.post('/', (req, res) => {
-    const { name, email } = req.body;
-
-    if (!name || !email) {
-        return res.status(400).json({ error: 'name y email son obligatorios' });
-    }
-
-    const newUser = {
-        id: users.length + 1,
-        name,
-        email
-    };
-
-    users.push(newUser);
-    res.status(201).json(newUser);
+    res.json({
+        id: id,
+        name: 'Miguel',
+        email: 'miguel@email.com'
+    });
 });
 
 module.exports = router;
