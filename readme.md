@@ -1,75 +1,126 @@
 # Workout Tracker API
 
-## Descripción
+API RESTful desarrollada con Node.js y Express para gestionar usuarios, rutinas de entrenamiento, ejercicios y registros de progreso.
 
-**Workout Tracker API** es una API REST desarrollada con **Node.js y Express** para gestionar usuarios, rutinas de entrenamiento y ejercicios.
+## Tecnologías utilizadas
 
-El proyecto permite realizar operaciones para consultar, crear, actualizar y eliminar información utilizando los métodos HTTP **GET, POST, PUT, PATCH y DELETE**.
+* Node.js
+* Express
+* MySQL2
+* dotenv
+* Nodemon
 
-La API está organizada mediante diferentes routers para cada recurso:
+## Instalación
 
-* **Users:** gestión de usuarios.
-* **Workouts:** gestión de rutinas de entrenamiento.
-* **Exercises:** gestión de ejercicios.
+Instalar las dependencias:
 
-Los datos enviados por el cliente se reciben mediante `req.body`, los identificadores mediante `req.params` y los filtros mediante `req.query`.
+```bash
+npm install
+```
 
-La API también utiliza códigos de estado HTTP para indicar el resultado de cada solicitud.
+Iniciar el servidor:
+
+```bash
+npm start
+```
+
+Para desarrollo:
+
+```bash
+npm run dev
+```
+
+El servidor funciona en:
+
+```text
+http://localhost:3000
+```
 
 ---
 
-## Endpoints
+# Recursos de la API
 
-### Users
+## Users
 
-| Método | Endpoint     | Función                             |
-| ------ | ------------ | ----------------------------------- |
-| GET    | `/users`     | Obtener todos los usuarios          |
-| GET    | `/users/:id` | Obtener un usuario por ID           |
-| POST   | `/users`     | Crear un usuario                    |
-| PUT    | `/users/:id` | Actualizar completamente un usuario |
-| PATCH  | `/users/:id` | Actualizar parcialmente un usuario  |
-| DELETE | `/users/:id` | Eliminar un usuario                 |
+Permite gestionar los usuarios registrados.
 
-### Workouts
+| Método | Endpoint     | Descripción                |
+| ------ | ------------ | -------------------------- |
+| GET    | `/users`     | Obtener todos los usuarios |
+| GET    | `/users/:id` | Obtener un usuario por ID  |
+| POST   | `/users`     | Crear un usuario           |
+| PUT    | `/users/:id` | Actualizar todos los datos |
+| PATCH  | `/users/:id` | Actualizar parcialmente    |
+| DELETE | `/users/:id` | Eliminar un usuario        |
 
-| Método | Endpoint               | Función                         |
-| ------ | ---------------------- | ------------------------------- |
-| GET    | `/workouts`            | Obtener todos los workouts      |
-| GET    | `/workouts/:id`        | Obtener un workout por ID       |
-| GET    | `/workouts?limit=10`   | Limitar la cantidad de workouts |
-| GET    | `/workouts?name=pecho` | Buscar workouts por nombre      |
-| POST   | `/workouts`            | Crear un workout                |
-| DELETE | `/workouts/:id`        | Eliminar un workout             |
+---
 
-### Exercises
+## Workouts
 
-| Método | Endpoint         | Función                      |
+Permite gestionar las rutinas de entrenamiento.
+
+| Método | Endpoint        | Descripción               |
+| ------ | --------------- | ------------------------- |
+| GET    | `/workouts`     | Obtener todas las rutinas |
+| GET    | `/workouts/:id` | Obtener una rutina por ID |
+| POST   | `/workouts`     | Crear una rutina          |
+| PUT    | `/workouts/:id` | Actualizar una rutina     |
+| PATCH  | `/workouts/:id` | Actualizar parcialmente   |
+| DELETE | `/workouts/:id` | Eliminar una rutina       |
+
+También permite filtrar y limitar resultados:
+
+```text
+GET /workouts?limit=10
+```
+
+```text
+GET /workouts?name=pecho
+```
+
+---
+
+## Exercises
+
+Permite gestionar los ejercicios.
+
+| Método | Endpoint         | Descripción                  |
 | ------ | ---------------- | ---------------------------- |
 | GET    | `/exercises`     | Obtener todos los ejercicios |
 | GET    | `/exercises/:id` | Obtener un ejercicio por ID  |
 | POST   | `/exercises`     | Crear un ejercicio           |
-
-### Otros
-
-| Método | Endpoint | Función                               |
-| ------ | -------- | ------------------------------------- |
-| GET    | `/`      | Comprobar que la API está funcionando |
-| GET    | `/error` | Probar el manejo de errores internos  |
+| PUT    | `/exercises/:id` | Actualizar un ejercicio      |
+| PATCH  | `/exercises/:id` | Actualizar parcialmente      |
+| DELETE | `/exercises/:id` | Eliminar un ejercicio        |
 
 ---
 
-## Ejemplos de solicitudes
+## Progress
 
-### GET
+Permite registrar y consultar el progreso de los usuarios.
 
-**Comando en Thunder Client:**
+| Método | Endpoint        | Descripción                 |
+| ------ | --------------- | --------------------------- |
+| GET    | `/progress`     | Obtener todos los registros |
+| GET    | `/progress/:id` | Obtener un registro por ID  |
+| POST   | `/progress`     | Crear un registro           |
+| PUT    | `/progress/:id` | Actualizar todos los datos  |
+| PATCH  | `/progress/:id` | Actualizar parcialmente     |
+| DELETE | `/progress/:id` | Eliminar un registro        |
+
+---
+
+# Ejemplos de solicitudes
+
+## GET
+
+Obtener todos los usuarios:
 
 ```http
 GET http://localhost:3000/users
 ```
 
-**Resultado:**
+Resultado:
 
 ```json
 [
@@ -86,87 +137,93 @@ GET http://localhost:3000/users
 ]
 ```
 
-**Estado:** `200 OK`
-
 ---
 
-### POST
+## POST
 
-**Comando en Thunder Client:**
+Crear un usuario:
 
 ```http
 POST http://localhost:3000/users
 ```
 
-**Body:**
+Body:
 
 ```json
 {
-  "name": "Juan",
-  "email": "juan@email.com"
+  "name": "Ana",
+  "email": "ana@email.com"
 }
 ```
 
-**Resultado:**
+Resultado:
 
 ```json
 {
   "mensaje": "Usuario creado correctamente",
   "user": {
     "id": 3,
-    "name": "Juan",
-    "email": "juan@email.com"
+    "name": "Ana",
+    "email": "ana@email.com"
   }
 }
 ```
 
-**Estado:** `201 Created`
+Código de respuesta:
+
+```text
+201 Created
+```
 
 ---
 
-### PUT
+## PUT
 
-**Comando en Thunder Client:**
+Actualizar completamente un usuario:
 
 ```http
 PUT http://localhost:3000/users/1
 ```
 
-**Body:**
+Body:
 
 ```json
 {
-  "name": "Miguel Angel",
-  "email": "miguelangel@email.com"
+  "name": "Miguel Actualizado",
+  "email": "miguel.nuevo@email.com"
 }
 ```
 
-**Resultado:**
+Resultado:
 
 ```json
 {
   "mensaje": "Usuario actualizado correctamente",
   "user": {
     "id": 1,
-    "name": "Miguel Angel",
-    "email": "miguelangel@email.com"
+    "name": "Miguel Actualizado",
+    "email": "miguel.nuevo@email.com"
   }
 }
 ```
 
-**Estado:** `200 OK`
+Código de respuesta:
+
+```text
+200 OK
+```
 
 ---
 
-### PATCH
+## PATCH
 
-**Comando en Thunder Client:**
+Actualizar parcialmente un usuario:
 
 ```http
 PATCH http://localhost:3000/users/1
 ```
 
-**Body:**
+Body:
 
 ```json
 {
@@ -174,7 +231,7 @@ PATCH http://localhost:3000/users/1
 }
 ```
 
-**Resultado:**
+Resultado:
 
 ```json
 {
@@ -182,40 +239,108 @@ PATCH http://localhost:3000/users/1
   "user": {
     "id": 1,
     "name": "Miguel",
-    "email": "miguelangel@email.com"
+    "email": "miguel.nuevo@email.com"
   }
 }
 ```
 
-**Estado:** `200 OK`
+Código de respuesta:
+
+```text
+200 OK
+```
 
 ---
 
-### DELETE
+## DELETE
 
-**Comando en Thunder Client:**
+Eliminar un usuario:
 
 ```http
-DELETE http://localhost:3000/users/1
+DELETE http://localhost:3000/users/2
 ```
 
-**Resultado:**
+Resultado:
 
 ```text
 204 No Content
 ```
 
-**Estado:** `204 No Content`
+El código `204` indica que el recurso fue eliminado correctamente y no se devuelve contenido en la respuesta.
 
 ---
 
+# Códigos de respuesta HTTP
+
+| Código | Significado                                    |
+| ------ | ---------------------------------------------- |
+| 200    | Solicitud procesada correctamente              |
+| 201    | Recurso creado correctamente                   |
+| 204    | Solicitud procesada sin contenido de respuesta |
+| 400    | Solicitud incorrecta o datos inválidos         |
+| 404    | Recurso no encontrado                          |
+| 500    | Error interno del servidor                     |
+
+---
+
+# Manejo de errores
+
+La API devuelve respuestas JSON cuando ocurre un error.
+
+Ejemplo:
+
+```json
+{
+  "error": "Usuario no encontrado"
+}
+```
+
+Para probar un error interno:
+
+```http
+GET http://localhost:3000/error
+```
+
+Respuesta:
+
+```json
+{
+  "error": "Error interno del servidor"
+}
+```
+
+Código:
+
+```text
+500 Internal Server Error
+```
+
+---
+
+# Headers HTTP
+
+La API utiliza headers HTTP para recibir y enviar información.
+
+Ejemplo:
+
+```text
+Content-Type: application/json
+Authorization: Bearer 123456
+```
+
+También se envía un header personalizado:
+
+```text
+X-API-Key: workout-tracker-api
+```
+
+---
+
+
 ## Funcionamiento
 
-El cliente realiza una solicitud HTTP a uno de los endpoints. **Express** recibe la solicitud, identifica el router correspondiente, procesa los datos y devuelve una respuesta con información y un código de estado HTTP.
+La aplicación utiliza Express para recibir las solicitudes HTTP y dirigirlas a las rutas correspondientes.
 
-La API utiliza:
+Las rutas `/users`, `/workouts`, `/exercises` y `/progress` utilizan controladores separados para manejar la lógica de cada recurso.
 
-* `req.params` para obtener parámetros de la URL.
-* `req.query` para recibir filtros y parámetros de consulta.
-* `req.body` para recibir información enviada en POST, PUT y PATCH.
-* Códigos HTTP como `200`, `201`, `204`, `400`, `404` y `500` para indicar el resultado de las operaciones.
+Los datos actualmente se manejan en memoria mediante arreglos dentro de los controladores. Por esta razón, los datos vuelven a su estado inicial cuando se reinicia el servidor.
